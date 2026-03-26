@@ -1,214 +1,184 @@
 ﻿using System;
-using System.Collections.Generic;
+using InchirieriAuto;
 
-class Masina
+namespace InchirieriAuto
 {
-    public string Marca { get; set; }
-    public string Model { get; set; }
-    public int An { get; set; }
-    public bool Disponibila { get; set; }
-
-    public Masina(string marca, string model, int an)
+    class Program
     {
-        Marca = marca;
-        Model = model;
-        An = an;
-        Disponibila = true;
-    }
-
-
-    public override string ToString()
-    {
-        return $"{Marca} {Model} ({An}) - {(Disponibila ? "Disponibila" : "Indisponibila")}";
-    }
-}
-
-class Client
-{
-    public string Nume { get; set; }
-    public string Prenume { get; set; }
-    public string CNP { get; set; }
-
-    public Client(string nume, string prenume, string cnp)
-    {
-        Nume = nume;
-        Prenume = prenume;
-        CNP = cnp;
-    }
-}
-
-class Inchiriere
-{
-    public Client Client { get; set; }
-    public Masina Masina { get; set; }
-    public int Zile { get; set; }
-
-    public Inchiriere(Client client, Masina masina, int zile)
-    {
-        Client = client;
-        Masina = masina;
-        Zile = zile;
-    }
-}
-
-class Program
-{
-    static void Main()
-    {
-        //logarea 
-        string utilizatorCorect = "admin";
-        string passCorect = "4622";
-
-        Console.Write("User: ");
-        string utilizator = Console.ReadLine();
-
-        Console.Write("Parola: ");
-        string pass = Console.ReadLine();
-
-        if (utilizator != utilizatorCorect || pass != passCorect)
+        static void Main()
         {
-            Console.WriteLine("Acces nepermis!");
-            return;
-        }
+            string utilizatorCorect = "admin";
+            string passCorect = "4622";
 
-        Console.WriteLine("Logare reusita!\n");
+            Console.Write("User: ");
+            string utilizator = Console.ReadLine();
 
-        List<Masina> masini = new List<Masina>();
-        List<Inchiriere> inchirieri = new List<Inchiriere>();
+            Console.Write("Parola: ");
+            string pass = Console.ReadLine();
 
-        while (true)
-        {
-            Console.WriteLine("\n --- Meniu ---");
-            Console.WriteLine("1. Adaugare masina");
-            Console.WriteLine("2. Salvare date masina");
-            Console.WriteLine("3. Afisare lista masini");
-            Console.WriteLine("4. Cautare masina dupa marca");
-            Console.WriteLine("5. Inchiriere masina");
-            Console.WriteLine("0. Terminare program");
-
-            Console.Write("Optiune: ");
-            int opt = int.Parse(Console.ReadLine());
-
-            switch (opt)
+            if (utilizator != utilizatorCorect || pass != passCorect)
             {
-                case 1:
-                    Console.Write("Marca masina: ");
-                    string marca = Console.ReadLine();
+                Console.WriteLine("Acces nepermis!");
+                return;
+            }
 
-                    Console.Write("Model: ");
-                    string model = Console.ReadLine();
+            Console.WriteLine("Logare reusita!\n");
 
-                    Console.Write("An fabricatie: ");
-                    int an = int.Parse(Console.ReadLine());
+            ServiceMasini serviceMasini = new ServiceMasini();
+            ServiceInchirieri serviceInchirieri = new ServiceInchirieri();
 
-                    Masina m = new Masina(marca, model, an);
-                    masini.Add(m);
+            List<Masina> masiniSalvate = new List<Masina>();
 
-                    Console.WriteLine();
-                    break;
+            while (true)
+            {
+                Console.WriteLine("\n--- Meniu ---");
+                Console.WriteLine("1. Adaugare masina");
+                Console.WriteLine("2. Salvare date masina in lista");
+                Console.WriteLine("3. Afisare lista masini");
+                Console.WriteLine("4. Cautare masina dupa marca");
+                Console.WriteLine("5. Inchiriere masina");
+                Console.WriteLine("0. Terminare program");
 
-                case 2:
-                    if (masini.Count == 0)
-                    {
-                        Console.WriteLine("Nu exista masini de salvat!");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Datele despre masini au fost salvate!");
-                    }
-                    break;
+                Console.Write("Optiune: ");
+                int opt = int.Parse(Console.ReadLine());
 
-
-                case 3:
-                    Console.WriteLine("\nLista masini:");
-                    for (int i = 0; i < masini.Count; i++)
-                    {
-                        Console.WriteLine($"{i}. {masini[i]}");
-                    }
-                    break;
-
-
-                case 4:
-                    Console.Write("Introdu marca: ");
-                    string cautare = Console.ReadLine();
-
-                    Console.WriteLine("Rezultate:");
-
-                    bool gasit = false;
-
-                    foreach (var masina in masini)
-                    {
-                        if (masina.Marca.ToLower() == cautare.ToLower())
+                switch (opt)
+                {
+                    case 1:
                         {
-                            Console.WriteLine(masina);
-                            gasit = true;
+                            Console.Write("Marca masina: ");
+                            string marca = Console.ReadLine();
+
+                            Console.Write("Model: ");
+                            string model = Console.ReadLine();
+
+                            Console.Write("An fabricatie: ");
+                            int an = int.Parse(Console.ReadLine());
+
+                            // Culoare
+                            Console.WriteLine("Alege culoare:");
+                            foreach (var c in Enum.GetValues(typeof(Culoare)))
+                                Console.WriteLine($"{(int)c} - {c}");
+                            Culoare culoare = (Culoare)int.Parse(Console.ReadLine());
+
+                            // Optiuni
+                            Optiuni optiuni = Optiuni.Nimic;
+
+                            Console.WriteLine("Are Trapa Panoramica? (da/nu)");
+                            if (Console.ReadLine().ToLower() == "da")
+                                optiuni |= Optiuni.TrapaPanoramica;
+
+                            Console.WriteLine("Are Navigatie? (da/nu)");
+                            if (Console.ReadLine().ToLower() == "da")
+                                optiuni |= Optiuni.Navigatie;
+
+                            Console.WriteLine("Are Suspensie Reglabila? (da/nu)");
+                            if (Console.ReadLine().ToLower() == "da")
+                                optiuni |= Optiuni.SuspensieReglabila;
+
+                            Console.WriteLine("Are Incalzire Scaune? (da/nu)");
+                            if (Console.ReadLine().ToLower() == "da")
+                                optiuni |= Optiuni.IncalzireScaune;
+
+                            Console.WriteLine("Are Senzori Parcare? (da/nu)");
+                            if (Console.ReadLine().ToLower() == "da")
+                                optiuni |= Optiuni.SenzoriParcare;
+
+                            Masina masinaNoua = new Masina(marca, model, an, culoare, optiuni);
+                            masiniSalvate.Add(masinaNoua);
+                            Console.WriteLine("Masina salvata in lista!");
+
+                            serviceMasini.AdaugaMasina(marca, model, an, culoare, optiuni);
+                            break;
                         }
-                    }
 
-                    if (!gasit)
-                    {
-                        Console.WriteLine("Nu exista masini cu aceasta marca!");
-                    }
-                    break;
+                    case 2:
+                        { 
+                            Console.WriteLine("Masini salvate:");
+                            foreach (var m in masiniSalvate)
+                                Console.WriteLine(m);
+                           
+                            break;
+                        }
 
-                case 5:
-                    if (masini.Count == 0)
-                    {
-                        Console.WriteLine("Nu exista masini!");
+                    case 3:
+                        serviceMasini.AfiseazaMasini();
                         break;
-                    }
 
-                    Console.WriteLine("Masini disponibile:");
-                    for (int i = 0; i < masini.Count; i++)
-                    {
-                        Console.WriteLine($"{i}. {masini[i]}");
-                    }
+                    case 4:
+                        {
+                            Console.Write("Introdu marca: ");
+                            string cautare = Console.ReadLine();
 
-                    Console.Write("Alege index masina: ");
-                    int index = int.Parse(Console.ReadLine());
+                            var rezultate = serviceMasini.CautaDupaMarca(cautare);
+                            foreach (var m in rezultate)
+                                Console.WriteLine(m);
 
-                    if (index < 0 || index >= masini.Count)
-                    {
-                        Console.WriteLine("Index invalid!");
+                            break;
+                        }
+
+                    case 5:
+                        {
+                            var masini = serviceMasini.GetMasini();
+                            if (masini.Count == 0)
+                            {
+                                Console.WriteLine("Nu exista masini!");
+                                break;
+                            }
+
+                            for (int i = 0; i < masini.Count; i++)
+                                Console.WriteLine($"{i}. {masini[i]}");
+
+                            Console.Write("Alege index masina: ");
+                            int index = int.Parse(Console.ReadLine());
+
+                            if (index < 0 || index >= masini.Count)
+                            {
+                                Console.WriteLine("Index invalid!");
+                                break;
+                            }
+
+                            Masina masinaAleasa = masini[index];
+
+                            if (!masinaAleasa.Disponibila)
+                            {
+                                Console.WriteLine("Masina nu este disponibila!");
+                                break;
+                            }
+
+                            Console.Write("Nume: ");
+                            string nume = Console.ReadLine();
+
+                            Console.Write("Prenume: ");
+                            string prenume = Console.ReadLine();
+
+                          
+                            string cnp;
+                            do
+                            {
+                                Console.Write("CNP: ");
+                                cnp = Console.ReadLine();
+
+                                if (cnp.Length != 13 || !long.TryParse(cnp, out _))
+                                    Console.WriteLine("CNP invalid! Trebuie sa aiba 13 cifre.");
+                            } while (cnp.Length != 13 || !long.TryParse(cnp, out _));
+
+                            Console.Write("Numar zile: ");
+                            int zile = int.Parse(Console.ReadLine());
+
+                            Client client = new Client(nume, prenume, cnp);
+                            serviceInchirieri.InchiriazaMasina(masinaAleasa, client, zile);
+                            break;
+                        }
+
+                    case 0:
+                        Console.WriteLine("O zi frumoasa!");
+                        return;
+
+                    default:
+                        Console.WriteLine("Optiune invalida!");
                         break;
-                    }
-
-                    Masina masinaAleasa = masini[index];
-
-                    if (!masinaAleasa.Disponibila)
-                    {
-                        Console.WriteLine("Masina nu este disponibila!");
-                        break;
-                    }
-
-                    Console.Write("Nume: ");
-                    string nume = Console.ReadLine();
-
-                    Console.Write("Prenume: ");
-                    string prenume = Console.ReadLine();
-
-                    Console.Write("CNP: ");
-                    string cnp = Console.ReadLine();
-
-                    Console.Write("Numar zile: ");
-                    int zile = int.Parse(Console.ReadLine());
-
-                    Client client = new Client(nume, prenume, cnp);
-                    Inchiriere inch = new Inchiriere(client, masinaAleasa, zile);
-
-                    inchirieri.Add(inch);
-                    masinaAleasa.Disponibila = false;
-
-                    Console.WriteLine("Inchiriere realizata!");
-                    break;
-
-                case 0:
-                    Console.WriteLine("O zi frumoasa!");
-                    return;
-
-                default:
-                    Console.WriteLine("Optiune invalida!");
-                    break;
+                }
             }
         }
     }
