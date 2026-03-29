@@ -52,8 +52,17 @@ namespace InchirieriAuto
                             Console.Write("Model: ");
                             string model = Console.ReadLine();
 
-                            Console.Write("An fabricatie: ");
-                            int an = int.Parse(Console.ReadLine());
+                            //Console.Write("An fabricatie: ");
+                            //int an = int.Parse(Console.ReadLine());
+                            int an;
+                            while (true)
+                            {
+                                Console.Write("An fabricatie: ");
+                                string input = Console.ReadLine();
+                                if (int.TryParse(input, out an) && an > 1900 && an <= DateTime.Now.Year)
+                                    break;
+                                Console.WriteLine("An invalid! Introduceti un numar valid.");
+                            }
 
                             // Culoare
                             Console.WriteLine("Alege culoare:");
@@ -96,8 +105,8 @@ namespace InchirieriAuto
                         { 
                             Console.WriteLine("Masini salvate:");
                             foreach (var m in masiniSalvate)
-                                Console.WriteLine(m);
-                           
+                            Console.WriteLine(m);
+
                             break;
                         }
 
@@ -172,6 +181,7 @@ namespace InchirieriAuto
                         }
 
                     case 0:
+                        serviceMasini.SalveazaToateMasinile();
                         Console.WriteLine("O zi frumoasa!");
                         return;
 

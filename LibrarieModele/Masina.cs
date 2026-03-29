@@ -1,6 +1,5 @@
 using System;
 
-
 namespace InchirieriAuto
 {
     public class Masina
