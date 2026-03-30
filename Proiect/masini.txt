@@ -1,2 +1,1 @@
-bmw;m4;2023;Mov;TrapaPanoramica, Navigatie, SuspensieReglabila, IncalzireScaune, SenzoriParcare;Indisponibila
-hyundai;coupe;2012;Mov;TrapaPanoramica, Navigatie, SuspensieReglabila, IncalzireScaune, SenzoriParcare;Disponibila
+bmw;e36;2023;Roz;TrapaPanoramica, Navigatie, SuspensieReglabila, IncalzireScaune, SenzoriParcare;Indisponibila

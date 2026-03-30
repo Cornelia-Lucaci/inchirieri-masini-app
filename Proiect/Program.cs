@@ -26,6 +26,7 @@ namespace InchirieriAuto
 
             ServiceMasini serviceMasini = new ServiceMasini();
             ServiceInchirieri serviceInchirieri = new ServiceInchirieri();
+            ServiceClienti serviceClienti = new ServiceClienti();
 
             List<Masina> masiniSalvate = new List<Masina>();
 
@@ -37,6 +38,9 @@ namespace InchirieriAuto
                 Console.WriteLine("3. Afisare lista masini");
                 Console.WriteLine("4. Cautare masina dupa marca");
                 Console.WriteLine("5. Inchiriere masina");
+                Console.WriteLine("6. Modificare masina dupa marca");
+                Console.WriteLine("7. Cautare client dupa nume");
+                Console.WriteLine("8. Modificare client dupa nume");
                 Console.WriteLine("0. Terminare program");
 
                 Console.Write("Optiune: ");
@@ -65,7 +69,7 @@ namespace InchirieriAuto
                             }
 
                             // Culoare
-                            Console.WriteLine("Alege culoare:");
+                            Console.WriteLine("Alegeti culoare:");
                             foreach (var c in Enum.GetValues(typeof(Culoare)))
                                 Console.WriteLine($"{(int)c} - {c}");
                             Culoare culoare = (Culoare)int.Parse(Console.ReadLine());
@@ -116,7 +120,7 @@ namespace InchirieriAuto
 
                     case 4:
                         {
-                            Console.Write("Introdu marca: ");
+                            Console.Write("Introduceti marca masinii: ");
                             string cautare = Console.ReadLine();
 
                             var rezultate = serviceMasini.CautaDupaMarca(cautare);
@@ -176,12 +180,55 @@ namespace InchirieriAuto
                             int zile = int.Parse(Console.ReadLine());
 
                             Client client = new Client(nume, prenume, cnp);
+                            //salvare client
+                            serviceClienti.AdaugaClient(nume, prenume, cnp);
+
                             serviceInchirieri.InchiriazaMasina(masinaAleasa, client, zile);
+
+                            break;
+                        }
+
+                    case 6:
+                        {
+                            Console.Write("Introduceti marca masinii pentru modificare: ");
+                            string marca = Console.ReadLine();
+
+                            serviceMasini.ModificaMasinaDupaMarca(marca);
+                            break;
+                        }
+
+                    case 7:
+                        {
+                            Console.Write("Introduceti numele clientului: ");
+                            string nume = Console.ReadLine();
+
+                            var rezultate = serviceClienti.CautaClientDupaNume(nume);
+
+                            if (rezultate.Count == 0)
+                            {
+                                Console.WriteLine("Nu s-a gasit niciun client!");
+                            }
+                            else
+                            {
+                                foreach (var c in rezultate)
+                                    Console.WriteLine($"{c.Nume} {c.Prenume} - {c.CNP}");
+                            }
+
+                            break;
+                        }
+
+                    case 8:
+                        {
+                            Console.Write("Introduceti numele clientului pentru modificare: ");
+                            string nume = Console.ReadLine();
+
+                            serviceClienti.ModificaClient(nume);
                             break;
                         }
 
                     case 0:
                         serviceMasini.SalveazaToateMasinile();
+                        serviceClienti.SalveazaClienti();
                         Console.WriteLine("O zi frumoasa!");
                         return;
 
