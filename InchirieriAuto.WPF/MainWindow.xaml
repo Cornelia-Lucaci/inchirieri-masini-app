@@ -1,51 +1,110 @@
 ﻿<Window x:Class="WpfInchirieri.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Inchirieri Auto" Height="450" Width="800"
+        Title="Inchirieri Auto" Height="520" Width="850"
         Background="#E6CCFF">
-    <!-- mov lila -->
 
     <Window.Resources>
 
-        <!-- Stil pentru butoane -->
+        <!--Stil BUTOANE -->
         <Style TargetType="Button">
             <Setter Property="Background" Value="#B266FF"/>
-            <!-- mov -->
             <Setter Property="Foreground" Value="Black"/>
-            <!-- text negru -->
             <Setter Property="BorderBrush" Value="#6600CC"/>
             <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Padding" Value="8"/>
             <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="2"
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--Stil LABEL -->
+        <Style TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Margin" Value="5,15,5,3"/>
+        </Style>
+
+        <!--Stil TEXTBOX -->
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5,0,5,10"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Height" Value="28"/>
         </Style>
 
     </Window.Resources>
 
     <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="320"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+        <!--FORMULAR CU SCROLL -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-        <!-- Zona de butoane -->
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Border Background="#F2E6FF" CornerRadius="15" Padding="10">
 
-            <Button Content="Incarca masini" Click="Reload_Click"/>
-            <Button Content="Afiseaza mesaj"/>
+                <StackPanel>
 
-        </StackPanel>
+                    <TextBlock Text="Adaugare masina" FontSize="18" HorizontalAlignment="Center"/>
 
-        <!-- Tabel masini -->
+                    <TextBlock x:Name="lblMarca" Text="Marca"/>
+                    <TextBox x:Name="txtMarca"/>
+
+                    <TextBlock x:Name="lblModel" Text="Model"/>
+                    <TextBox x:Name="txtModel"/>
+
+                    <TextBlock x:Name="lblAn" Text="An"/>
+                    <TextBox x:Name="txtAn"/>
+
+                    <TextBlock Text="Culoare"/>
+                    <ComboBox x:Name="cbCuloare" Margin="5" Height="28"/>
+
+                    <TextBlock Text="Optiuni"/>
+
+                    <CheckBox x:Name="chkTrapa" Content="Trapa panoramica" Margin="5"/>
+                    <CheckBox x:Name="chkNav" Content="Navigatie" Margin="5"/>
+                    <CheckBox x:Name="chkSuspensie" Content="Suspensie reglabila" Margin="5"/>
+                    <CheckBox x:Name="chkIncalzire" Content="Incalzire scaune" Margin="5"/>
+                    <CheckBox x:Name="chkSenzori" Content="Senzori parcare" Margin="5"/>
+
+                    <Button Content="Adauga masina" Click="AdaugaMasina_Click"/>
+
+                </StackPanel>
+
+            </Border>
+
+        </ScrollViewer>
+
+        <!--LISTA MASINI -->
         <DataGrid x:Name="dgMasini"
-                  Grid.Row="1"
+                  Grid.Column="1"
+                  Margin="10"
                   AutoGenerateColumns="False"
                   Background="White"
                   RowBackground="#F2E6FF"
                   AlternatingRowBackground="#E0CCFF"
                   FontSize="14"
-                  Margin="0,10,0,0">
+                  RowHeight="35">
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Padding" Value="12,6"/>
+                </Style>
+            </DataGrid.CellStyle>
 
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
@@ -56,12 +115,12 @@
             </DataGrid.ColumnHeaderStyle>
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Marca" Binding="{Binding Marca}" />
-                <DataGridTextColumn Header="Model" Binding="{Binding Model}" />
-                <DataGridTextColumn Header="An" Binding="{Binding An}" />
-                <DataGridTextColumn Header="Culoare" Binding="{Binding CuloareMasina}" />
-                <DataGridTextColumn Header="Optiuni" Binding="{Binding OptiuniMasina}" />
-                <DataGridTextColumn Header="Disponibil" Binding="{Binding Disponibila}" />
+                <DataGridTextColumn Header="Marca" Binding="{Binding Marca}" Width="*"/>
+                <DataGridTextColumn Header="Model" Binding="{Binding Model}" Width="*"/>
+                <DataGridTextColumn Header="An" Binding="{Binding An}" Width="*"/>
+                <DataGridTextColumn Header="Culoare" Binding="{Binding CuloareMasina}" Width="*"/>
+                <DataGridTextColumn Header="Optiuni" Binding="{Binding OptiuniMasina}" Width="*"/>
+                <DataGridTextColumn Header="Disponibil" Binding="{Binding Disponibila}" Width="*"/>
             </DataGrid.Columns>
 
         </DataGrid>
