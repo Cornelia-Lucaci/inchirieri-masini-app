@@ -1,6 +1,7 @@
 ﻿using System;
 using InchirieriAuto;
 
+
 namespace InchirieriAuto
 {
     class Program
