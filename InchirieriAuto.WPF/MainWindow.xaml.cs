@@ -1,10 +1,11 @@
 ﻿using InchirieriAuto;
-using System.Windows;
-using System.Windows.Media;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace WpfInchirieri
 {
@@ -12,6 +13,7 @@ namespace WpfInchirieri
     {
         private List<MasinaAfisare> listaCompleta = new();
         private ObservableCollection<MasinaAfisare> masiniAfisare = new();
+        private MasinaAfisare masinaSelectata;
 
         // constante (CERINȚĂ)
         private const int AN_MIN = 1900;
@@ -37,6 +39,33 @@ namespace WpfInchirieri
             dgMasini.ItemsSource = masiniAfisare;
 
             IncarcaDate();
+
+            dgModificare.ItemsSource = masiniAfisare;
+
+            cbCuloareMod.ItemsSource = Enum.GetValues(typeof(Culoare));
+        }
+
+        private void GoToAdaugare(object sender, RoutedEventArgs e)
+        {
+            GridMeniu.Visibility = Visibility.Collapsed;
+            GridCautare.Visibility = Visibility.Collapsed;
+            GridAdaugare.Visibility = Visibility.Visible;
+        }
+
+        private void GoToCautare(object sender, RoutedEventArgs e)
+        {
+            GridMeniu.Visibility = Visibility.Collapsed;
+            GridAdaugare.Visibility = Visibility.Collapsed;
+            GridCautare.Visibility = Visibility.Visible;
+        }
+
+        private void GoBack(object sender, RoutedEventArgs e)
+        {
+            GridAdaugare.Visibility = Visibility.Collapsed;
+            GridCautare.Visibility = Visibility.Collapsed;
+            GridModificare.Visibility = Visibility.Collapsed;
+
+            GridMeniu.Visibility = Visibility.Visible;
         }
 
         private void AdaugaMasina_Click(object sender, RoutedEventArgs e)
@@ -180,6 +209,7 @@ namespace WpfInchirieri
             "Aplicatia permite:\n" +
             "✔ Adaugare masini\n" +
             "✔ Cautare dupa marca\n" +
+            "✔ Modificare masina\n" +
             "✔ Afisare masini in tabel\n\n" +
             "Autor: Lucaci Cornelia-Maria",
             "Despre",
@@ -259,6 +289,126 @@ namespace WpfInchirieri
         {
             SalveazaDate();
             base.OnClosed(e);
+        }
+
+        private void ActualizeazaListBox()
+        {
+            lstOptiuni.Items.Clear();
+
+            if (chkTrapa.IsChecked == true)
+                lstOptiuni.Items.Add("Trapa panoramica");
+
+            if (chkNav.IsChecked == true)
+                lstOptiuni.Items.Add("Navigatie");
+
+            if (chkSuspensie.IsChecked == true)
+                lstOptiuni.Items.Add("Suspensie reglabila");
+
+            if (chkIncalzire.IsChecked == true)
+                lstOptiuni.Items.Add("Incalzire scaune");
+
+            if (chkSenzori.IsChecked == true)
+                lstOptiuni.Items.Add("Senzori parcare");
+        }
+
+        private void CheckBox_Changed(object sender, RoutedEventArgs e)
+        {
+            ActualizeazaListBox();
+        }
+
+        private void GoToModificare(object sender, RoutedEventArgs e)
+        {
+            GridMeniu.Visibility = Visibility.Collapsed;
+            GridModificare.Visibility = Visibility.Visible;
+        }
+
+        private void dgModificare_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgModificare.SelectedItem is MasinaAfisare masina)
+            {
+                masinaSelectata = masina;
+
+                txtMarcaMod.Text = masina.Marca;
+                txtModelMod.Text = masina.Model;
+                txtAnMod.Text = masina.An.ToString();
+
+                cbCuloareMod.SelectedItem =
+                    Enum.Parse(typeof(Culoare), masina.CuloareMasina);
+
+                rbManualMod.IsChecked = masina.Transmisie == "Manuala";
+                rbAutomatMod.IsChecked = masina.Transmisie == "Automata";
+
+                chkTrapaMod.IsChecked = false;
+                chkNavMod.IsChecked = false;
+                chkSuspensieMod.IsChecked = false;
+                chkIncalzireMod.IsChecked = false;
+                chkSenzoriMod.IsChecked = false;
+
+                string opt = masina.OptiuniMasina;
+
+                if (opt.Contains("TrapaPanoramica"))
+                    chkTrapaMod.IsChecked = true;
+
+                if (opt.Contains("Navigatie"))
+                    chkNavMod.IsChecked = true;
+
+                if (opt.Contains("SuspensieReglabila"))
+                    chkSuspensieMod.IsChecked = true;
+
+                if (opt.Contains("IncalzireScaune"))
+                    chkIncalzireMod.IsChecked = true;
+
+                if (opt.Contains("SenzoriParcare"))
+                    chkSenzoriMod.IsChecked = true;
+            }
+        }
+
+        private void ModificaMasina_Click(object sender, RoutedEventArgs e)
+        {
+            if (masinaSelectata == null)
+            {
+                MessageBox.Show("Selectati o masina!");
+                return;
+            }
+
+            masinaSelectata.Marca = txtMarcaMod.Text;
+            masinaSelectata.Model = txtModelMod.Text;
+            masinaSelectata.An = int.Parse(txtAnMod.Text);
+
+            masinaSelectata.CuloareMasina =
+                cbCuloareMod.SelectedItem.ToString();
+
+            // transmisie
+            masinaSelectata.Transmisie =
+                rbManualMod.IsChecked == true ? "Manuala" : "Automata";
+
+            // optiuni
+            List<string> optiuni = new();
+
+            if (chkTrapaMod.IsChecked == true)
+                optiuni.Add("TrapaPanoramica");
+
+            if (chkNavMod.IsChecked == true)
+                optiuni.Add("Navigatie");
+
+            if (chkSuspensieMod.IsChecked == true)
+                optiuni.Add("SuspensieReglabila");
+
+            if (chkIncalzireMod.IsChecked == true)
+                optiuni.Add("IncalzireScaune");
+
+            if (chkSenzoriMod.IsChecked == true)
+                optiuni.Add("SenzoriParcare");
+
+            masinaSelectata.OptiuniMasina =
+                string.Join(", ", optiuni);
+
+            dgMasini.Items.Refresh();
+            dgModificare.Items.Refresh();
+
+            SalveazaDate();
+
+            MessageBox.Show("Masina modificata!");
         }
     }
 }
