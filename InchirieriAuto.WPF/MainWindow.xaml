@@ -57,69 +57,112 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- MENIU SUS -->
-        <Border Grid.Row="0"
-                Background="#B266FF"
-                CornerRadius="10"
-                Padding="5"
-                Width="320"
-                HorizontalAlignment="Left"
-                Margin="0,0,0,10">
+        <!-- MENIU PRINCIPAL -->
+        <Grid x:Name="GridMeniu">
 
-            <Menu Background="Transparent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-                <MenuItem Header="Fisier">
-                    <MenuItem Header="Exit"
-                              Click="Exit_Click"/>
-                </MenuItem>
+            <!-- TITLU -->
+            <TextBlock Grid.Row="0"
+               Text="Inchirieri Auto"
+               FontSize="40"
+               FontWeight="Bold"
+               Foreground="#6600CC"
+               HorizontalAlignment="Center"
+               Margin="0,30,0,40"/>
 
-                <MenuItem Header="Ajutor">
-                    <MenuItem Header="Despre"
-                              Click="Despre_Click"/>
-                </MenuItem>
+            <!-- CONTINUT -->
+            <Grid Grid.Row="1">
 
-            </Menu>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-        </Border>
+                <!-- COLOANA MASINI -->
+                <StackPanel Grid.Column="0"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Center">
 
-        <!-- CONTINUT -->
-        <Grid Grid.Row="1">
-
-            <!-- MENIU PRINCIPAL -->
-            <Grid x:Name="GridMeniu">
-
-                <StackPanel VerticalAlignment="Center"
-                            HorizontalAlignment="Center">
-
-                    <TextBlock Text="Inchirieri Auto"
-                               FontSize="28"
-                               Foreground="#6600CC"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,30"/>
+                    <TextBlock Text="MASINI"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Foreground="#6600CC"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,25"/>
 
                     <Button Content="Adauga masina"
-                            Width="250"
-                            Height="50"
-                            FontSize="16"
-                            Click="GoToAdaugare"/>
+                    Width="260"
+                    Height="55"
+                    FontSize="18"
+                    Click="GoToAdaugare"/>
 
                     <Button Content="Cautare masini"
-                            Width="250"
-                            Height="50"
-                            FontSize="16"
-                            Click="GoToCautare"/>
+                    Width="260"
+                    Height="55"
+                    FontSize="18"
+                    Click="GoToCautare"/>
 
                     <Button Content="Modificare masina"
-                            Width="250"
-                            Height="50"
-                            FontSize="16"
-                            Click="GoToModificare"/>
+                    Width="260"
+                    Height="55"
+                    FontSize="18"
+                    Click="GoToModificare"/>
+
+                    <Button Content="Stergere masina"
+                    Width="260"
+                    Height="55"
+                    FontSize="18"
+                    Click="GoToStergereMasina"/>
+
+                </StackPanel>
+
+                <!-- COLOANA CLIENTI -->
+                <StackPanel Grid.Column="2"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Center">
+
+                    <TextBlock Text="CLIENTI"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Foreground="#6600CC"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,25"/>
+
+                    <Button Content="Adauga client"
+                    Width="260"
+                    Height="55"
+                    FontSize="18"
+                    Click="GoToClienti"/>
+
+                    <Button Content="Cautare client"
+                    Width="260"
+                    Height="55"
+                    FontSize="18"
+                    Click="GoToClientSearch"/>
+
+                    <Button Content="Modificare client"
+                    Width="260"
+                    Height="55"
+                    FontSize="18"
+                    Click="GoToClientMod"/>
+
+                    <Button Content="Stergere client"
+                    Width="260"
+                    Height="55"
+                    FontSize="18"
+                    Click="GoToClientDelete"/>
 
                 </StackPanel>
 
             </Grid>
 
-            <!-- PAGINA ADAUGARE -->
+        </Grid>
+        <!-- PAGINA ADAUGARE -->
             <Grid x:Name="GridAdaugare"
                   Visibility="Collapsed">
 
@@ -129,121 +172,122 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- STANGA -->
-                <ScrollViewer Grid.Column="0"
-                              VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Column="0"
+              VerticalScrollBarVisibility="Auto"
+              Height="450">
 
-                    <StackPanel Margin="10">
+                <StackPanel Margin="10">
 
-                        <Button Content="⬅ Inapoi"
-                                Width="120"
-                                HorizontalAlignment="Left"
-                                Click="GoBack"/>
+                    <Button Content="⬅ Inapoi"
+                Width="120"
+                HorizontalAlignment="Left"
+                Click="GoBack"/>
 
-                        <Border Background="#F2E6FF"
-                                CornerRadius="15"
-                                Padding="10">
+                    <Border Background="#F2E6FF"
+                CornerRadius="15"
+                Padding="10">
 
-                            <StackPanel>
+                        <StackPanel>
 
-                                <TextBlock Text="Optiuni selectate"/>
+                            <TextBlock Text="Optiuni selectate"/>
 
-                                <ListBox x:Name="lstOptiuni"
-                                           Height="80"
-                                           SelectionMode="Multiple"
-                                           Margin="5"/>
+                            <ListBox x:Name="lstOptiuni"
+                         Height="80"
+                         SelectionMode="Multiple"
+                         Margin="5"/>
 
-                                <TextBlock Text="Adaugare masina"
-                                           FontSize="18"
-                                           HorizontalAlignment="Center"/>
+                            <TextBlock Text="Adaugare masina"
+                           FontSize="18"
+                           HorizontalAlignment="Center"/>
 
-                                <TextBlock x:Name="lblMarca"
-                                           Text="Marca"/>
+                            <TextBlock x:Name="lblMarca"
+                           Text="Marca"/>
 
-                                <TextBox x:Name="txtMarca"/>
+                            <TextBox x:Name="txtMarca"/>
 
-                                <TextBlock x:Name="lblModel"
-                                           Text="Model"/>
+                            <TextBlock x:Name="lblModel"
+                           Text="Model"/>
 
-                                <TextBox x:Name="txtModel"/>
+                            <TextBox x:Name="txtModel"/>
 
-                                <TextBlock x:Name="lblAn"
-                                           Text="An"/>
+                            <TextBlock x:Name="lblAn"
+                           Text="An"/>
 
-                                <TextBox x:Name="txtAn"/>
+                            <TextBox x:Name="txtAn"/>
 
-                                <TextBlock Text="Culoare"/>
+                            <TextBlock Text="Culoare"/>
 
-                                <ComboBox x:Name="cbCuloare"
-                                          Height="28"/>
+                            <ComboBox x:Name="cbCuloare"
+                          Height="28"/>
 
-                                <TextBlock Text="Optiuni"/>
+                            <TextBlock Text="Optiuni"/>
 
-                                <CheckBox x:Name="chkTrapa"
-                                          Content="Trapa panoramica"
-                                          Checked="CheckBox_Changed"
-                                          Unchecked="CheckBox_Changed"/>
+                            <CheckBox x:Name="chkTrapa"
+                          Content="Trapa panoramica"
+                          Checked="CheckBox_Changed"
+                          Unchecked="CheckBox_Changed"/>
 
-                                <CheckBox x:Name="chkNav"
-                                          Content="Navigatie"
-                                          Checked="CheckBox_Changed"
-                                          Unchecked="CheckBox_Changed"/>
+                            <CheckBox x:Name="chkNav"
+                          Content="Navigatie"
+                          Checked="CheckBox_Changed"
+                          Unchecked="CheckBox_Changed"/>
 
-                                <CheckBox x:Name="chkSuspensie"
-                                          Content="Suspensie reglabila"
-                                          Checked="CheckBox_Changed"
-                                          Unchecked="CheckBox_Changed"/>
+                            <CheckBox x:Name="chkSuspensie"
+                          Content="Suspensie reglabila"
+                          Checked="CheckBox_Changed"
+                          Unchecked="CheckBox_Changed"/>
 
-                                <CheckBox x:Name="chkIncalzire"
-                                          Content="Incalzire scaune"
-                                          Checked="CheckBox_Changed"
-                                          Unchecked="CheckBox_Changed"/>
+                            <CheckBox x:Name="chkIncalzire"
+                          Content="Incalzire scaune"
+                          Checked="CheckBox_Changed"
+                          Unchecked="CheckBox_Changed"/>
 
-                                <CheckBox x:Name="chkSenzori"
-                                          Content="Senzori parcare"
-                                          Checked="CheckBox_Changed"
-                                          Unchecked="CheckBox_Changed"/>
+                            <CheckBox x:Name="chkSenzori"
+                          Content="Senzori parcare"
+                          Checked="CheckBox_Changed"
+                          Unchecked="CheckBox_Changed"/>
 
-                                <TextBlock Text="Tip transmisie"/>
+                            <TextBlock Text="Tip transmisie"/>
 
-                                <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
 
-                                    <RadioButton x:Name="rbManual"
-                                                 Content="Manuala"
-                                                 IsChecked="True"
-                                                 Margin="5"/>
+                                <RadioButton x:Name="rbManual"
+                                 Content="Manuala"
+                                 IsChecked="True"
+                                 Margin="5"/>
 
-                                    <RadioButton x:Name="rbAutomat"
-                                                 Content="Automata"
-                                                 Margin="5"/>
-
-                                </StackPanel>
-
-                                <TextBlock Text="Data inchiriere"/>
-
-                                <DatePicker x:Name="dpData"
-                                            SelectedDateFormat="Short"
-                                             Margin="5"/>
-
-                                <Button Content="Adauga masina"
-                                        Click="AdaugaMasina_Click"/>
+                                <RadioButton x:Name="rbAutomat"
+                                 Content="Automata"
+                                 Margin="5"/>
 
                             </StackPanel>
 
-                        </Border>
+                            <TextBlock Text="Data inchiriere"/>
 
-                    </StackPanel>
+                            <DatePicker x:Name="dpData"
+                            SelectedDateFormat="Short"
+                            Margin="5"/>
 
-                </ScrollViewer>
+                            <Button Content="Adauga masina"
+                        Click="AdaugaMasina_Click"/>
 
-                <!-- DREAPTA -->
+                        </StackPanel>
+
+                    </Border>
+
+                </StackPanel>
+
+            </ScrollViewer>
+
+            <!-- DREAPTA -->
                 <Border Grid.Column="1"
                         Background="#F2E6FF"
                         CornerRadius="15"
                         Padding="10"
                         Margin="10">
 
-                    <DataGrid x:Name="dgMasiniAdaugare"
-                              ItemsSource="{Binding ElementName=dgMasini, Path=ItemsSource}"
+                <DataGrid x:Name="dgMasiniAdaugare"
+           ItemsSource="{Binding ElementName=dgMasini, Path=ItemsSource}"
                               AutoGenerateColumns="False"
                               RowHeight="35"
                               CanUserAddRows="False"
@@ -254,41 +298,42 @@
                               ScrollViewer.VerticalScrollBarVisibility="Auto"
                               ScrollViewer.HorizontalScrollBarVisibility="Auto">
 
-                        <DataGrid.Columns>
+                    <DataGrid.Columns>
 
-                            <DataGridTextColumn Header="Marca"
-                                                Binding="{Binding Marca}"
-                                                Width="120"/>
+                        <DataGridTextColumn Header="Marca"
+                                    Binding="{Binding Marca}"
+                                    Width="120"/>
 
-                            <DataGridTextColumn Header="Model"
-                                                Binding="{Binding Model}"
-                                                Width="120"/>
+                        <DataGridTextColumn Header="Model"
+                                    Binding="{Binding Model}"
+                                    Width="120"/>
 
-                            <DataGridTextColumn Header="An"
-                                                Binding="{Binding An}"
-                                                Width="80"/>
+                        <DataGridTextColumn Header="An"
+                                    Binding="{Binding An}"
+                                    Width="80"/>
 
-                            <DataGridTextColumn Header="Culoare"
-                                                Binding="{Binding CuloareMasina}"
-                                                Width="120"/>
+                        <DataGridTextColumn Header="Culoare"
+                                    Binding="{Binding CuloareMasina}"
+                                    Width="120"/>
 
-                            <DataGridTextColumn Header="Optiuni"
-                                                Binding="{Binding OptiuniMasina}"
-                                                Width="200"/>
+                        <DataGridTextColumn Header="Optiuni"
+                                    Binding="{Binding OptiuniMasina}"
+                                    Width="200"/>
 
-                            <DataGridTextColumn Header="Disponibil"
-                                                Binding="{Binding Disponibila}"
-                                                Width="100"/>
+                        <DataGridTextColumn Header="Disponibil"
+                                    Binding="{Binding Disponibila}"
+                                    Width="120"/>
 
-                            <DataGridTextColumn Header="Transmisie"
-                                                Binding="{Binding Transmisie}"
-                                                Width="120"/>
+                        <DataGridTextColumn Header="Transmisie"
+                                    Binding="{Binding Transmisie}"
+                                    Width="150"/>
 
-                        </DataGrid.Columns>
 
-                    </DataGrid>
+                    </DataGrid.Columns>
 
-                </Border>
+                </DataGrid>
+
+            </Border>
 
             </Grid>
 
@@ -304,7 +349,7 @@
                 <!-- STANGA -->
                 <StackPanel Grid.Column="0"
                             Margin="10">
-                   
+
                     <Button Content="⬅ Inapoi"
                             Width="120"
                             HorizontalAlignment="Left"
@@ -406,7 +451,8 @@
 
                 <!-- STANGA -->
                 <ScrollViewer Grid.Column="0"
-                              VerticalScrollBarVisibility="Auto">
+                              VerticalScrollBarVisibility="Auto"
+                              Height="450">
 
                     <StackPanel Margin="10">
 
@@ -414,7 +460,7 @@
                                 Width="120"
                                 HorizontalAlignment="Left"
                                 Click="GoBack"/>
-                 
+
                         <Border Background="#F2E6FF"
                                 CornerRadius="15"
                                 Padding="10">
@@ -487,8 +533,9 @@
                         Padding="10"
                         Margin="10">
 
-                    <DataGrid x:Name="dgModificare"
-                                AutoGenerateColumns="False"
+                <DataGrid x:Name="dgModificare"
+                           AutoGenerateColumns="False"
+                          RowHeight="35"
                                 CanUserAddRows="False"
                                 SelectionChanged="dgModificare_SelectionChanged"
                                 AlternationCount="2"
@@ -497,6 +544,85 @@
                                 AlternatingRowBackground="#F2E6FF"
                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                                 ScrollViewer.HorizontalScrollBarVisibility="Auto">
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Marca"
+                                Binding="{Binding Marca}"
+                                Width="120"/>
+
+                        <DataGridTextColumn Header="Model"
+                                    Binding="{Binding Model}"
+                                 Width="120"/>
+
+                        <DataGridTextColumn Header="An"
+                                            Binding="{Binding An}"
+                                                Width="80"/>
+
+                        <DataGridTextColumn Header="Culoare"
+                             Binding="{Binding CuloareMasina}"
+     Width="140"/>
+
+                        <DataGridTextColumn Header="Optiuni"
+     Binding="{Binding OptiuniMasina}"
+     Width="300"/>
+
+                        <DataGridTextColumn Header="Disponibil"
+     Binding="{Binding Disponibila}"
+     Width="120"/>
+
+                        <DataGridTextColumn Header="Transmisie"
+     Binding="{Binding Transmisie}"
+     Width="150"/>
+
+
+                    </DataGrid.Columns>
+
+                </DataGrid>
+                    
+            </Border>
+
+            </Grid>
+
+            <!-- PAGINA STERGERE MASINA -->
+            <Grid x:Name="GridStergereMasina"
+      Visibility="Collapsed">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- STANGA -->
+                <StackPanel Grid.Column="0"
+                Margin="10">
+
+                    <Button Content="⬅ Inapoi"
+                Width="120"
+                Click="GoBack"/>
+
+                    <Button Content="Sterge masina"
+                Height="40"
+                Margin="0,20,0,0"
+                Click="StergeMasina_Click"/>
+
+                </StackPanel>
+
+                <!-- DREAPTA -->
+                <Border Grid.Column="1"
+            Background="#F2E6FF"
+            CornerRadius="15"
+            Padding="10"
+            Margin="10">
+
+                    <DataGrid x:Name="dgStergereMasina"
+                  AutoGenerateColumns="False"
+                  RowHeight="35"
+                  CanUserAddRows="False"
+                  AlternationCount="2"
+                  RowStyle="{StaticResource RowStyle}"
+                  ColumnHeaderStyle="{StaticResource HeaderStyle}"
+                  AlternatingRowBackground="#F2E6FF">
 
                         <DataGrid.Columns>
 
@@ -516,9 +642,13 @@
                                     Binding="{Binding CuloareMasina}"
                                     Width="120"/>
 
-                            <DataGridTextColumn Header="Optiuni"
-                                    Binding="{Binding OptiuniMasina}"
-                                    Width="200"/>
+                        <DataGridTextColumn Header="Optiuni"
+                                            Binding="{Binding OptiuniMasina}"
+                                            Width="300"/>
+
+                        <DataGridTextColumn Header="Disponibil"
+                            Binding="{Binding Disponibila}"
+                            Width="120"/>
 
                             <DataGridTextColumn Header="Transmisie"
                                     Binding="{Binding Transmisie}"
@@ -532,7 +662,332 @@
 
             </Grid>
 
-        </Grid>
+            <!-- ADAUGARE CLIENT -->
+            <Grid x:Name="GridClientiAdd"
+                  Visibility="Collapsed">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="320"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- STANGA -->
+                <StackPanel Grid.Column="0"
+          Margin="10">
+
+                    <Button Content="⬅ Inapoi"
+          Width="120"
+          HorizontalAlignment="Left"
+          Click="BackToClientMenu"/>
+
+                    <Border Background="#F2E6FF"
+          CornerRadius="15"
+          Padding="10"
+          Margin="0,10,0,0">
+
+                        <StackPanel>
+
+                            <TextBlock Text="Adaugare client"
+                     FontSize="18"
+                     HorizontalAlignment="Center"/>
+
+                            <TextBlock Text="Nume"/>
+                            <TextBox x:Name="txtNumeAdd"/>
+
+                            <TextBlock Text="Prenume"/>
+                            <TextBox x:Name="txtPrenumeAdd"/>
+
+                            <TextBlock Text="CNP"/>
+                            <TextBox x:Name="txtCNPAdd"/>
+
+                            <Button Content="Adauga"
+                  Click="AdaugaClient_Click"/>
+
+                        </StackPanel>
+
+                    </Border>
+
+                </StackPanel>
+
+                <!-- DREAPTA -->
+                <Border Grid.Column="1"
+      Background="#F2E6FF"
+      CornerRadius="15"
+      Padding="10"
+      Margin="10">
+                    <DataGrid x:Name="dgClientiAdd"
+          ItemsSource="{Binding ElementName=dgClientiMod, Path=ItemsSource}"
+          AutoGenerateColumns="False"
+          RowHeight="35"
+          CanUserAddRows="False"
+          AlternationCount="2"
+          RowStyle="{StaticResource RowStyle}"
+          ColumnHeaderStyle="{StaticResource HeaderStyle}"
+          AlternatingRowBackground="#F2E6FF"
+          ScrollViewer.VerticalScrollBarVisibility="Auto"
+          ScrollViewer.HorizontalScrollBarVisibility="Auto">
+
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="Nume"
+                            Binding="{Binding Nume}"
+                            Width="150"/>
+
+                            <DataGridTextColumn Header="Prenume"
+                            Binding="{Binding Prenume}"
+                            Width="150"/>
+
+                            <DataGridTextColumn Header="CNP"
+                            Binding="{Binding CNP}"
+                            Width="200"/>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                </Border>
+
+            </Grid>
+
+            <!-- MODIFICARE CLIENT -->
+            <Grid x:Name="GridClientiMod"
+Visibility="Collapsed">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="320"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- STANGA -->
+                <ScrollViewer Grid.Column="0"
+            VerticalScrollBarVisibility="Auto">
+
+                    <StackPanel Margin="10">
+
+                        <Button Content="⬅ Inapoi"
+              Width="120"
+              HorizontalAlignment="Left"
+              Click="BackToClientMenu"/>
+
+                        <Border Background="#F2E6FF"
+              CornerRadius="15"
+              Padding="10">
+
+                            <StackPanel>
+
+                                <TextBlock Text="Modificare client"
+                         FontSize="18"
+                         HorizontalAlignment="Center"/>
+
+                                <TextBlock Text="Nume"/>
+                                <TextBox x:Name="txtNumeMod"/>
+
+                                <TextBlock Text="Prenume"/>
+                                <TextBox x:Name="txtPrenumeMod"/>
+
+                                <TextBlock Text="CNP"/>
+                                <TextBox x:Name="txtCNPMod"/>
+
+                                <Button Content="Salveaza modificarile"
+                      Click="ModificaClient_Click"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                    </StackPanel>
+
+                </ScrollViewer>
+
+                <!-- DREAPTA -->
+                <Border Grid.Column="1"
+      Background="#F2E6FF"
+      CornerRadius="15"
+      Padding="10"
+      Margin="10">
+
+                    <DataGrid x:Name="dgClientiMod"
+          AutoGenerateColumns="False"
+          SelectionChanged="dgClienti_SelectionChanged"
+          RowHeight="35"
+          CanUserAddRows="False"
+          AlternationCount="2"
+          RowStyle="{StaticResource RowStyle}"
+          ColumnHeaderStyle="{StaticResource HeaderStyle}"
+          AlternatingRowBackground="#F2E6FF"
+          ScrollViewer.VerticalScrollBarVisibility="Auto"
+          ScrollViewer.HorizontalScrollBarVisibility="Auto">
+
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="Nume"
+                            Binding="{Binding Nume}"
+                            Width="150"/>
+
+                            <DataGridTextColumn Header="Prenume"
+                            Binding="{Binding Prenume}"
+                            Width="150"/>
+
+                            <DataGridTextColumn Header="CNP"
+                            Binding="{Binding CNP}"
+                            Width="200"/>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                </Border>
+
+            </Grid>
+
+            <!-- CAUTARE CLIENT -->
+            <Grid x:Name="GridClientiSearch"
+Visibility="Collapsed">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="320"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- STANGA -->
+                <StackPanel Grid.Column="0"
+          Margin="10">
+
+                    <Button Content="⬅ Inapoi"
+          Width="120"
+          HorizontalAlignment="Left"
+          Click="BackToClientMenu"/>
+
+                    <Border Background="#F2E6FF"
+          CornerRadius="15"
+          Padding="10"
+          Margin="0,10,0,0">
+
+                        <StackPanel>
+
+                            <TextBlock Text="Cautare client"
+                     FontSize="18"
+                     HorizontalAlignment="Center"/>
+
+                            <TextBox x:Name="txtCautareClient"/>
+
+                            <Button Content="Cauta"
+                  Click="CautaClient_Click"/>
+
+                            <Button Content="Reset"
+                  Click="ResetClienti_Click"/>
+
+                        </StackPanel>
+
+                    </Border>
+
+                </StackPanel>
+
+                <!-- DREAPTA -->
+                <Border Grid.Column="1"
+      Background="#F2E6FF"
+      CornerRadius="15"
+      Padding="10"
+      Margin="10">
+
+                    <DataGrid x:Name="dgClientiSearch"
+          AutoGenerateColumns="False"
+          RowHeight="35"
+          CanUserAddRows="False"
+          AlternationCount="2"
+          RowStyle="{StaticResource RowStyle}"
+          ColumnHeaderStyle="{StaticResource HeaderStyle}"
+          AlternatingRowBackground="#F2E6FF"
+          ScrollViewer.VerticalScrollBarVisibility="Auto"
+          ScrollViewer.HorizontalScrollBarVisibility="Auto">
+
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="Nume"
+                            Binding="{Binding Nume}"
+                            Width="150"/>
+
+                            <DataGridTextColumn Header="Prenume"
+                            Binding="{Binding Prenume}"
+                            Width="150"/>
+
+                            <DataGridTextColumn Header="CNP"
+                            Binding="{Binding CNP}"
+                            Width="200"/>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                </Border>
+
+            </Grid>
+
+            <!-- STERGERE CLIENT -->
+            <Grid x:Name="GridClientiDelete"
+Visibility="Collapsed">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="320"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- STANGA -->
+                <StackPanel Grid.Column="0"
+          Margin="10">
+
+                    <Button Content="⬅ Inapoi"
+          Width="120"
+          HorizontalAlignment="Left"
+          Click="BackToClientMenu"/>
+
+                    <Button Content="Sterge client"
+          Height="40"
+          Margin="0,10,0,0"
+          Click="StergeClient_Click"/>
+
+                </StackPanel>
+
+                <!-- DREAPTA -->
+                <Border Grid.Column="1"
+      Background="#F2E6FF"
+      CornerRadius="15"
+      Padding="10"
+      Margin="10">
+
+                    <DataGrid x:Name="dgClientiDelete"
+          AutoGenerateColumns="False"
+          RowHeight="35"
+          CanUserAddRows="False"
+          AlternationCount="2"
+          RowStyle="{StaticResource RowStyle}"
+          ColumnHeaderStyle="{StaticResource HeaderStyle}"
+          AlternatingRowBackground="#F2E6FF"
+          ScrollViewer.VerticalScrollBarVisibility="Auto"
+          ScrollViewer.HorizontalScrollBarVisibility="Auto"
+          SelectionMode="Single">
+
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="Nume"
+                            Binding="{Binding Nume}"
+                            Width="150"/>
+
+                            <DataGridTextColumn Header="Prenume"
+                            Binding="{Binding Prenume}"
+                            Width="150"/>
+
+                            <DataGridTextColumn Header="CNP"
+                            Binding="{Binding CNP}"
+                            Width="200"/>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                    
+                </Border>
+
+            </Grid>
 
     </Grid>
 

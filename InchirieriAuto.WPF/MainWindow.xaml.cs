@@ -15,6 +15,10 @@ namespace WpfInchirieri
         private ObservableCollection<MasinaAfisare> masiniAfisare = new();
         private MasinaAfisare masinaSelectata;
 
+        private List<ClientAfisare> listaClientiCompleta = new();
+        private ObservableCollection<ClientAfisare> clientiAfisare = new();
+        private ClientAfisare clientSelectat;
+
         // constante (CERINȚĂ)
         private const int AN_MIN = 1900;
         private const int AN_MAX = 2026;
@@ -43,6 +47,15 @@ namespace WpfInchirieri
             dgModificare.ItemsSource = masiniAfisare;
 
             cbCuloareMod.ItemsSource = Enum.GetValues(typeof(Culoare));
+
+            dgClientiMod.ItemsSource = clientiAfisare;
+            dgClientiDelete.ItemsSource = clientiAfisare;
+            dgClientiSearch.ItemsSource = clientiAfisare;
+            dgClientiAdd.ItemsSource = clientiAfisare;
+
+            dgStergereMasina.ItemsSource = masiniAfisare;
+
+            IncarcaClienti();
         }
 
         private void GoToAdaugare(object sender, RoutedEventArgs e)
@@ -59,15 +72,31 @@ namespace WpfInchirieri
             GridCautare.Visibility = Visibility.Visible;
         }
 
+        private void GoToStergereMasina(object sender, RoutedEventArgs e)
+        {
+            GridMeniu.Visibility = Visibility.Collapsed;
+
+            GridAdaugare.Visibility = Visibility.Collapsed;
+            GridCautare.Visibility = Visibility.Collapsed;
+            GridModificare.Visibility = Visibility.Collapsed;
+
+            GridStergereMasina.Visibility = Visibility.Visible;
+        }
+
         private void GoBack(object sender, RoutedEventArgs e)
         {
             GridAdaugare.Visibility = Visibility.Collapsed;
             GridCautare.Visibility = Visibility.Collapsed;
             GridModificare.Visibility = Visibility.Collapsed;
 
+            GridClientiAdd.Visibility = Visibility.Collapsed;
+            GridClientiMod.Visibility = Visibility.Collapsed;
+            GridClientiSearch.Visibility = Visibility.Collapsed;
+            GridClientiDelete.Visibility = Visibility.Collapsed;
+            GridStergereMasina.Visibility = Visibility.Collapsed;
+
             GridMeniu.Visibility = Visibility.Visible;
         }
-
         private void AdaugaMasina_Click(object sender, RoutedEventArgs e)
         {
             ResetCulori();
@@ -409,6 +438,209 @@ namespace WpfInchirieri
             SalveazaDate();
 
             MessageBox.Show("Masina modificata!");
+        }
+
+        private void StergeMasina_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgStergereMasina.SelectedItem is not MasinaAfisare masina)
+            {
+                MessageBox.Show("Selectati o masina!");
+                return;
+            }
+
+            listaCompleta.Remove(masina);
+            masiniAfisare.Remove(masina);
+
+            dgMasini.Items.Refresh();
+            dgModificare.Items.Refresh();
+            dgStergereMasina.Items.Refresh();
+
+            SalveazaDate();
+
+            MessageBox.Show("Masina stearsa!");
+        }
+
+        public class ClientAfisare
+        {
+            public string Nume { get; set; }
+            public string Prenume { get; set; }
+            public string CNP { get; set; }
+        }
+        private void HideAllMainPages()
+        {
+            GridMeniu.Visibility = Visibility.Collapsed;
+
+            GridAdaugare.Visibility = Visibility.Collapsed;
+            GridCautare.Visibility = Visibility.Collapsed;
+            GridModificare.Visibility = Visibility.Collapsed;
+
+            GridClientiAdd.Visibility = Visibility.Collapsed;
+            GridClientiMod.Visibility = Visibility.Collapsed;
+            GridClientiSearch.Visibility = Visibility.Collapsed;
+            GridClientiDelete.Visibility = Visibility.Collapsed;
+        }
+
+        private void GoToClienti(object sender, RoutedEventArgs e)
+        {
+            HideAllMainPages();
+
+            GridClientiAdd.Visibility = Visibility.Visible;
+        }
+
+        private void BackToClientMenu(object sender, RoutedEventArgs e)
+        {
+            HideAllMainPages();
+
+            GridMeniu.Visibility = Visibility.Visible;
+        }
+
+        private void GoToClientAdd(object sender, RoutedEventArgs e)
+        {
+            HideAllMainPages();
+
+            GridClientiAdd.Visibility = Visibility.Visible;
+        }
+
+        private void GoToClientMod(object sender, RoutedEventArgs e)
+        {
+            HideAllMainPages();
+
+            GridClientiMod.Visibility = Visibility.Visible;
+        }
+
+        private void GoToClientSearch(object sender, RoutedEventArgs e)
+        {
+            HideAllMainPages();
+
+            GridClientiSearch.Visibility = Visibility.Visible;
+        }
+
+        private void GoToClientDelete(object sender, RoutedEventArgs e)
+        {
+            HideAllMainPages();
+
+            GridClientiDelete.Visibility = Visibility.Visible;
+        }
+
+
+        private string filePathClienti = "clienti.json";
+
+        private void SalveazaClienti()
+        {
+            string json = JsonSerializer.Serialize(listaClientiCompleta);
+            File.WriteAllText(filePathClienti, json);
+        }
+
+        private void IncarcaClienti()
+        {
+            if (File.Exists(filePathClienti))
+            {
+                string json = File.ReadAllText(filePathClienti);
+                var clienti = JsonSerializer.Deserialize<List<ClientAfisare>>(json);
+
+                if (clienti != null)
+                {
+                    listaClientiCompleta = clienti;
+
+                    clientiAfisare.Clear();
+                    foreach (var c in clienti)
+                        clientiAfisare.Add(c);
+                }
+            }
+        }
+
+        private void AdaugaClient_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtNumeAdd.Text) ||
+                string.IsNullOrWhiteSpace(txtPrenumeAdd.Text) ||
+                txtCNPAdd.Text.Length != 13)
+            {
+                MessageBox.Show("Date invalide!");
+                return;
+            }
+
+            var c = new ClientAfisare
+            {
+                Nume = txtNumeAdd.Text,
+                Prenume = txtPrenumeAdd.Text,
+                CNP = txtCNPAdd.Text
+            };
+
+            listaClientiCompleta.Add(c);
+            clientiAfisare.Add(c);
+
+            SalveazaClienti();
+
+            txtNumeAdd.Clear();
+            txtPrenumeAdd.Clear();
+            txtCNPAdd.Clear();
+
+            MessageBox.Show("Client adaugat!");
+        }
+
+        private void dgClienti_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgClientiMod.SelectedItem is ClientAfisare c)
+            {
+                clientSelectat = c;
+
+                txtNumeMod.Text = c.Nume;
+                txtPrenumeMod.Text = c.Prenume;
+                txtCNPMod.Text = c.CNP;
+            }
+        }
+
+        private void ModificaClient_Click(object sender, RoutedEventArgs e)
+        {
+            if (clientSelectat == null) return;
+
+            clientSelectat.Nume = txtNumeMod.Text;
+            clientSelectat.Prenume = txtPrenumeMod.Text;
+            clientSelectat.CNP = txtCNPMod.Text;
+
+            dgClientiMod.Items.Refresh();
+
+            SalveazaClienti();
+
+            MessageBox.Show("Client modificat!");
+        }
+
+        private void StergeClient_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgClientiDelete.SelectedItem is not ClientAfisare c)
+            {
+                MessageBox.Show("Selecteaza un client!");
+                return;
+            }
+
+            listaClientiCompleta.Remove(c);
+            clientiAfisare.Remove(c);
+
+            dgClientiDelete.Items.Refresh();
+            dgClientiMod.Items.Refresh();
+            dgClientiSearch.Items.Refresh();
+
+            SalveazaClienti();
+
+            MessageBox.Show("Client sters!");
+        }
+
+        private void CautaClient_Click(object sender, RoutedEventArgs e)
+        {
+            string q = txtCautareClient.Text.ToLower();
+
+            dgClientiSearch.ItemsSource = clientiAfisare
+                .Where(c =>
+                    c.Nume.ToLower().Contains(q) ||
+                    c.Prenume.ToLower().Contains(q) ||
+                    c.CNP.Contains(q))
+                .ToList();
+        }
+
+        private void ResetClienti_Click(object sender, RoutedEventArgs e)
+        {
+            dgClientiSearch.ItemsSource = clientiAfisare;
+            txtCautareClient.Clear();
         }
     }
 }
