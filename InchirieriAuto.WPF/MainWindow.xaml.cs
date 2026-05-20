@@ -38,6 +38,11 @@ namespace WpfInchirieri
         {
             InitializeComponent();
 
+            masinaBinding.Marca = "BMW";
+            masinaBinding.An = 2024;
+
+            DataContext = masinaBinding;
+
             cbCuloare.ItemsSource = Enum.GetValues(typeof(Culoare));
 
             dgMasini.ItemsSource = masiniAfisare;
@@ -237,9 +242,15 @@ namespace WpfInchirieri
             "Aplicatie Inchirieri Auto\n\n" +
             "Aplicatia permite:\n" +
             "✔ Adaugare masini\n" +
-            "✔ Cautare dupa marca\n" +
+            "✔ Cautare masini dupa marca\n" +
             "✔ Modificare masina\n" +
+            "✔ Stergere masina\n" +
             "✔ Afisare masini in tabel\n\n" +
+            "✔ Adaugare clienti\n" +
+            "✔ Cautare clienti dupa nume sau prenume\n" +
+            "✔ Modificare client\n" +
+            "✔ Stergere client\n" +
+            "✔ Afisare clienti in tabel\n\n" +
             "Autor: Lucaci Cornelia-Maria",
             "Despre",
             MessageBoxButton.OK,
@@ -642,5 +653,9 @@ namespace WpfInchirieri
             dgClientiSearch.ItemsSource = clientiAfisare;
             txtCautareClient.Clear();
         }
+
+        //Binding pentru masina
+        private MasinaAfisare masinaBinding = new();
+
     }
 }
