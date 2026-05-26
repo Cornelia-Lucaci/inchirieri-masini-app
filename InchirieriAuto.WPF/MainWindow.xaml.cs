@@ -6,6 +6,8 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.ComponentModel;
+using System.Collections;
 
 namespace WpfInchirieri
 {
@@ -24,22 +26,91 @@ namespace WpfInchirieri
         private const int AN_MAX = 2026;
 
         // clasa de afisare
-        public class MasinaAfisare
+        //Implementare MVVM minim
+        public class MasinaAfisare : INotifyPropertyChanged, IDataErrorInfo
         {
-            public string Marca { get; set; }
-            public string Model { get; set; }
-            public int An { get; set; }
+            private string marca;
+            private string model;
+            private int an;
+
+            public string Marca
+            {
+                get => marca;
+                set
+                {
+                    marca = value;
+                    OnPropertyChanged(nameof(Marca));
+                }
+            }
+
+            public string Model
+            {
+                get => model;
+                set
+                {
+                    model = value;
+                    OnPropertyChanged(nameof(Model));
+                }
+            }
+
+            public int An
+            {
+                get => an;
+                set
+                {
+                    an = value;
+                    OnPropertyChanged(nameof(An));
+                }
+            }
+
             public string CuloareMasina { get; set; }
             public string OptiuniMasina { get; set; }
             public bool Disponibila { get; set; }
             public string Transmisie { get; set; }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            protected void OnPropertyChanged(string nume)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nume));
+            }
+
+            //validare prin binding
+            public string Error => null;
+
+            public string this[string columnName]
+            {
+                get
+                {
+                    switch (columnName)
+                    {
+                        case nameof(Marca):
+                            if (string.IsNullOrWhiteSpace(Marca))
+                                return "Marca este obligatorie";
+                            break;
+
+                        case nameof(Model):
+                            if (string.IsNullOrWhiteSpace(Model))
+                                return "Modelul este obligatoriu";
+                            break;
+
+                        case nameof(An):
+                            if (An < 1900 || An > 2026)
+                                return "An invalid";
+                            break;
+                    }
+
+                    return null;
+                }
+            }
         }
         public MainWindow()
         {
             InitializeComponent();
 
-            masinaBinding.Marca = "BMW";
+            masinaBinding.Marca = "Toyota";
             masinaBinding.An = 2024;
+            masinaBinding.Model = "Celica";
 
             DataContext = masinaBinding;
 
@@ -108,10 +179,9 @@ namespace WpfInchirieri
 
             bool valid = true;
 
-            string marca = txtMarca.Text;
-            string model = txtModel.Text;
-
-            int an;
+            string marca = masinaBinding.Marca;
+            string model = masinaBinding.Model;
+            int an = masinaBinding.An;
 
             //  VALIDARE MARCA
             if (string.IsNullOrWhiteSpace(marca))
@@ -128,7 +198,7 @@ namespace WpfInchirieri
             }
 
             // VALIDARE AN
-            if (!int.TryParse(txtAn.Text, out an) || an < AN_MIN || an > AN_MAX)
+            if (an < AN_MIN || an > AN_MAX)
             {
                 lblAn.Foreground = Brushes.Red;
                 valid = false;
@@ -137,7 +207,7 @@ namespace WpfInchirieri
             // VALIDARE CULOARE
             if (cbCuloare.SelectedItem == null)
             {
-                MessageBox.Show("Selectati culoarea!");
+                lblCuloare.Foreground = Brushes.Red;
                 valid = false;
             }
 
@@ -203,6 +273,7 @@ namespace WpfInchirieri
             lblMarca.Foreground = Brushes.Black;
             lblModel.Foreground = Brushes.Black;
             lblAn.Foreground = Brushes.Black;
+            lblCuloare.Foreground = Brushes.Black;
         }
 
         private void ClearForm()
@@ -219,6 +290,8 @@ namespace WpfInchirieri
             chkSenzori.IsChecked = false;
 
             rbManual.IsChecked = true; // reset pentru transmisie
+
+            ResetCulori();
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
@@ -284,7 +357,7 @@ namespace WpfInchirieri
             dgMasini.Items.Refresh();
 
             if (rezultate.Count == 0)
-                MessageBox.Show("Nu s-au gasit masini!");
+                MessageBox.Show("Nu s-au gasit masini cu aceasta marca!");
         }
 
         private void ReseteazaLista_Click(object sender, RoutedEventArgs e)
@@ -562,9 +635,36 @@ namespace WpfInchirieri
 
         private void AdaugaClient_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtNumeAdd.Text) ||
-                string.IsNullOrWhiteSpace(txtPrenumeAdd.Text) ||
-                txtCNPAdd.Text.Length != 13)
+            // RESET CULORI
+            lblNumeAdd.Foreground = Brushes.Black;
+            lblPrenumeAdd.Foreground = Brushes.Black;
+            lblCNPAdd.Foreground = Brushes.Black;
+
+            bool valid = true;
+
+            // VALIDARE NUME
+            if (string.IsNullOrWhiteSpace(txtNumeAdd.Text))
+            {
+                lblNumeAdd.Foreground = Brushes.Red;
+                valid = false;
+            }
+
+            // VALIDARE PRENUME
+            if (string.IsNullOrWhiteSpace(txtPrenumeAdd.Text))
+            {
+                lblPrenumeAdd.Foreground = Brushes.Red;
+                valid = false;
+            }
+
+            // VALIDARE CNP
+            if (txtCNPAdd.Text.Length != 13 ||
+                !txtCNPAdd.Text.All(char.IsDigit))
+            {
+                lblCNPAdd.Foreground = Brushes.Red;
+                valid = false;
+            }
+
+            if (!valid)
             {
                 MessageBox.Show("Date invalide!");
                 return;
@@ -638,14 +738,18 @@ namespace WpfInchirieri
 
         private void CautaClient_Click(object sender, RoutedEventArgs e)
         {
-            string q = txtCautareClient.Text.ToLower();
+            string q = txtCautareClient.Text.ToLower().Trim();
 
-            dgClientiSearch.ItemsSource = clientiAfisare
-                .Where(c =>
-                    c.Nume.ToLower().Contains(q) ||
-                    c.Prenume.ToLower().Contains(q) ||
-                    c.CNP.Contains(q))
+            var rezultate = clientiAfisare
+                .Where(c => c.Nume.ToLower().Contains(q))
                 .ToList();
+
+            dgClientiSearch.ItemsSource = rezultate;
+
+            if (rezultate.Count == 0)
+            {
+                MessageBox.Show("Nu s-au gasit clienti cu acest nume!");
+            }
         }
 
         private void ResetClienti_Click(object sender, RoutedEventArgs e)

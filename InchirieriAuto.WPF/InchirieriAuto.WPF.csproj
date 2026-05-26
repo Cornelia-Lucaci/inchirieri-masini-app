@@ -9,7 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\gtrmov.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\LibrarieModele\LibrarieModele.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\gtrmov.png" />
   </ItemGroup>
 
 </Project>
